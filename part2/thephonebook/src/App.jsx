@@ -25,15 +25,26 @@ const App = () => {
         number: newNumber,
         id: String(persons.length + 1),
       };
-      peopleService.createPerson(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName('');
-        setNewNumber('');
-        setNotification({ text: `Added ${newName}`, type: 'success' });
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
-      });
+      peopleService
+        .createPerson(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName('');
+          setNewNumber('');
+          setNotification({ text: `Added ${newName}`, type: 'success' });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotification({
+            text: error.response.data.error,
+            type: 'error',
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     } else {
       if (
         window.confirm(
